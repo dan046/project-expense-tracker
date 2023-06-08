@@ -1,8 +1,8 @@
 import { useState } from "react"
 import ExpenseList from "./components/ExpenseList"
 import ExpenseFilter from "./components/ExpenseFilter"
-import ExpenseForm from "./components/ExpenseForm"
 import { v4 as uuidv4 } from "uuid"
+import ExpenseForm from "./components/ExpenseForm"
 
 const App = () => {
   const [expenses, setExpenses] = useState([
@@ -26,8 +26,8 @@ const App = () => {
     },
     {
       id: uuidv4(),
-      description: "Play Feel",
-      amount: 10,
+      description: `80 inches wide screen 4K TV`,
+      amount: 2000,
       category: "Miscellaneous",
     },
   ])
@@ -51,7 +51,7 @@ const App = () => {
     <div>
       <h1>Expense List</h1>
       <div className="mb-3">
-        <ExpenseForm onSubmit={(data) => handleSubmit(data)} />
+        <ExpenseForm onSubmit={handleSubmit} />
       </div>
       <div className="mb-3">
         <ExpenseFilter onSelect={(category) => setSelectedValue(category)} />

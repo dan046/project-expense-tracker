@@ -11,6 +11,13 @@ interface Props {
   onDelete: (id: string) => void
 }
 const ExpenseList = ({ expense, onDelete }: Props) => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  })
+
+  const totalExpense = expense.reduce((total, price) => total + price.amount, 0)
+
   if (expense.length === 0) return <p>No items in list.</p>
   return (
     <div>
@@ -35,7 +42,7 @@ const ExpenseList = ({ expense, onDelete }: Props) => {
           {expense.map((item) => (
             <tr key={item.id}>
               <td>{item.description}</td>
-              <td>${item.amount.toFixed(2)}</td>
+              <td>{formatter.format(item.amount)}</td>
               <td>{item.category}</td>
               <td>
                 <button className="btn btn-outline-danger">
@@ -52,12 +59,7 @@ const ExpenseList = ({ expense, onDelete }: Props) => {
             <td>
               <h6>Total:</h6>
             </td>
-            <td>
-              $
-              {expense
-                .reduce((total, price) => total + price.amount, 0)
-                .toFixed(2)}
-            </td>
+            <td>{formatter.format(totalExpense)}</td>
           </tr>
         </tbody>
       </table>

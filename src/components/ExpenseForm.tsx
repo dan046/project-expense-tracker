@@ -1,16 +1,21 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
 import category from "../category"
+import { ImPriceTag } from "react-icons/im"
+import { BiCategoryAlt } from "react-icons/bi"
+import { BsChatLeftText } from "react-icons/bs"
 
 const schema = z.object({
-  description: z.string().min(3, {
-    message: "Description is required with a minimum of 3 characters.",
-  }),
+  description: z
+    .string()
+    .min(3, { message: "A minimum of 3 characters is required." }),
   amount: z
     .number({ invalid_type_error: "Amount is required." })
-    .min(0.01)
-    .max(100_000),
+    .min(0.01, { message: "A minimum of 0.01 is required." })
+    .max(100_000, {
+      message: "This list can only accept up to a limit of 100,000.",
+    }),
   category: z.enum(category, {
     errorMap: () => ({ message: "Category is required." }),
   }),
@@ -19,7 +24,7 @@ const schema = z.object({
 type ExpenseFormData = z.infer<typeof schema>
 
 interface Props {
-  onSubmit: (data: ExpenseFormData) => void
+  onSubmit: (data: any) => void
 }
 
 const ExpenseForm = ({ onSubmit }: Props) => {
@@ -38,7 +43,7 @@ const ExpenseForm = ({ onSubmit }: Props) => {
     >
       <div className="mb-3">
         <label htmlFor="description" className="form-label">
-          Description
+          <BsChatLeftText /> Description
         </label>
         <input
           type="text"
@@ -52,7 +57,7 @@ const ExpenseForm = ({ onSubmit }: Props) => {
       </div>
       <div className="mb-3">
         <label htmlFor="amount" className="form-label">
-          Amount
+          <ImPriceTag /> Amount
         </label>
         <input
           type="number"
@@ -66,7 +71,7 @@ const ExpenseForm = ({ onSubmit }: Props) => {
       </div>
       <div className="mb-3">
         <label htmlFor="category" className="form-label">
-          Category
+          <BiCategoryAlt /> Category
         </label>
         <select id="category" className="form-select" {...register("category")}>
           {category.map((item) => (
@@ -75,11 +80,8 @@ const ExpenseForm = ({ onSubmit }: Props) => {
             </option>
           ))}
         </select>
-        {errors.category && (
-          <p className="text-danger">{errors.category.message}</p>
-        )}
       </div>
-      <button type="submit" className="btn btn-primary">
+      <button className="btn btn-primary" type="submit">
         SUBMIT
       </button>
     </form>
